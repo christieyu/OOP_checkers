@@ -1,3 +1,5 @@
+from pieces import Piece, Pawn, King, BLACK, WHITE
+
 PIECES = {
     0: u'◼',
     1: u'⚆',
@@ -9,19 +11,27 @@ PIECES = {
 
 class Board:
     def __init__(self, p1="human", p2="human", history=False):
-        self.board = [[2, 0, 2, 0, 2, 0, 2, 0],
-                      [0, 2, 0, 2, 0, 2, 0, 2],
-                      [2, 0, 2, 0, 2, 0, 2, 0],
-                      [0, 5, 0, 5, 0, 5, 0, 5],
-                      [5, 0, 5, 0, 5, 0, 5, 0],
+        self.board = [[Pawn(BLACK), 0, Pawn(BLACK), 0, Pawn(BLACK), 0, Pawn(BLACK), 0],
+                      [0, Pawn(BLACK), 0, Pawn(BLACK), 0, Pawn(BLACK), 0, Pawn(BLACK)],
+                      [Pawn(BLACK), 0, Pawn(BLACK), 0, Pawn(BLACK), 0, Pawn(BLACK), 0],
                       [0, 1, 0, 1, 0, 1, 0, 1],
                       [1, 0, 1, 0, 1, 0, 1, 0],
-                      [0, 1, 0, 1, 0, 1, 0, 1]]
+                      [0, Pawn(WHITE), 0, Pawn(WHITE), 0, Pawn(WHITE), 0, Pawn(WHITE)],
+                      [Pawn(WHITE), 0, Pawn(WHITE), 0, Pawn(WHITE), 0, Pawn(WHITE), 0],
+                      [0, Pawn(WHITE), 0, Pawn(WHITE), 0, Pawn(WHITE), 0, Pawn(WHITE)]]
 
     def _print_board(self):
         """Print numerical matrix as board GUI."""
         for i, row in enumerate(self.board):
-            print(i + 1, ' '.join(map(PIECES.get, row)))
+            print(i + 1, end=" ")
+            for j in row:
+                if j == 0:
+                    print(u'◼', end=" ")
+                elif j == 1:
+                    print(u'◻', end=" ")
+                else:
+                    print(j, end=" ")
+            print("")
         print("  a b c d e f g h")
     
     def _convert_checker_coord(coord):
