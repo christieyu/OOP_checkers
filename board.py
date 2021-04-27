@@ -34,7 +34,7 @@ class Board:
             print("")
         print("  a b c d e f g h")
     
-    def _convert_checker_coord(coord):
+    def _convert_checker_coord(self, coord):
         """Given a coord (e.g: 'b4'), return numerical coordinates (e.g: 4, 1)."""
         col = coord[:1]
         row = coord[1:]
@@ -42,7 +42,17 @@ class Board:
         row = int(row)
         return (row - 1, col - 1)
 
-    def _convert_matrix_coord(coord):
-        """Given numerical coordinates (e.g: 4, 1), return coord (e.g: 'b4')."""
-        row, col = coord
-        return chr(col + 96 + 1) + str(row + 1)
+    def _calculate_moves(self, position):
+        row, col = self._convert_checker_coord(position)
+        piece = self.board[row][col]
+        # If there are jump moves, we must do them
+        if piece._calculate_jump_moves(self.board, piece, row, col) == None:
+            return piece._calculate_simple_moves(self.board, piece, row, col)
+        return piece._calculate_jump_moves(self.board, piece, row, col)
+
+    def _execute_move(self, move):
+        if move.type == "simple":
+            beginning = self._convert_checker_coord(move.beginning)
+            end = self._convert_checker_coord(move.end)
+            self.board[end[0]][end[1]] = self.board[beginning[0]][beginning[1]]
+            self.board[beginning[0]][beginning[1]] = 1
