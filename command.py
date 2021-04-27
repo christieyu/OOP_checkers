@@ -23,3 +23,8 @@ class CLI:
             print(f"Turn: {self.turn}, {self.player}")
             position = input("Select a piece to move\n")
             self._display_moves(position)
+            self.turn += 1
+            if self.player == "white":
+                self.player = "black"
+            else:
+                self.player == "white"
