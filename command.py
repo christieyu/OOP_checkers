@@ -11,10 +11,18 @@ class CLI:
         """Print a piece's possible moves."""
         possible_moves = self.board._calculate_moves(position)
         for i, move in enumerate(possible_moves):
-            if move.type == "simple":
-                print(f"{i}: basic move: {position}->{move.end}")
+            print(f"{i}: {move}")
         move = input("Select a move by entering the corresponding index\n")
         self.board._execute_move(possible_moves[int(move)])
+
+    def _new_turn(self):
+        """Checks win conditions and changes current player's turn."""
+        # add something here to check for win/draw
+        self.turn += 1
+        if self.player == "white":
+            self.player = "black"
+        else:
+            self.player = "white"
 
     def run(self):
         """Ask player for piece and display piece's possible moves."""
@@ -23,8 +31,5 @@ class CLI:
             print(f"Turn: {self.turn}, {self.player}")
             position = input("Select a piece to move\n")
             self._display_moves(position)
-            self.turn += 1
-            if self.player == "white":
-                self.player = "black"
-            else:
-                self.player == "white"
+            self._new_turn()
+            

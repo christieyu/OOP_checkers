@@ -1,11 +1,13 @@
 class Move:
-    def __init__(self, board, beginning, end):
+    def __init__(self, beginning, end):
         """Initializes move and checks that its ending location is within bounds."""
-        if end[0] < 0 or end[0] > 7 or end[1] < 0 or end[1] > 7 or board[end[0]][end[1]] != 1:
+        # if end[0] < 0 or end[0] > 7 or end[1] < 0 or end[1] > 7 or board[end[0]][end[1]] != 1:
+        # ^^^ last part of OR statement was causing problems for Jump, implement differently?
+        if end[0] < 0 or end[0] > 7 or end[1] < 0 or end[1] > 7:
             self.end = None
         else:
-            self.beginning = self._convert_matrix_coord(beginning)
-            self.end = self._convert_matrix_coord(end)
+            self.beginning = beginning
+            self.end = end
 
     def _convert_matrix_coord(self, coord):
         """Given numerical coordinates (e.g: 4, 1), returns coord (e.g: 'b4')."""
@@ -18,9 +20,22 @@ class Simple(Move):
         super().__init__(*args, **kwargs)
         self.type = "simple"
 
+    def __str__(self):
+        beginning = self._convert_matrix_coord(self.beginning)
+        end = self._convert_matrix_coord(self.end)
+        return f"basic move: {beginning}->{end}"
+
 class Jump(Move):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, beginning, end, elim):
         """Initializes jump move and creates location archive."""
-        super().__init__(*args, **kwargs)
+        super().__init__(beginning, end)
         self.type = "jump"
-        self.history = [position]
+        self.history = []               # idk what to do with this lol
+        self.eliminated = [elim]        # contains list of eliminated enemy piece objects
+        if isinstance(elim, list):
+            self.eliminated = elim      # overwrite in case elim was passed in as a list
+
+    def __str__(self):
+        beginning = self._convert_matrix_coord(self.beginning)
+        end = self._convert_matrix_coord(self.end)
+        return f"jump move: {beginning}->{end}"
