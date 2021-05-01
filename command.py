@@ -19,10 +19,7 @@ class CLI:
         """Checks win conditions and changes current player's turn."""
         # add something here to check for win/draw
         self.turn += 1
-        if self.player == "white":
-            self.player = "black"
-        else:
-            self.player = "white"
+        self.player = "black" if self.player == "white" else "white"
 
     def run(self):
         """Ask player for piece and display piece's possible moves."""

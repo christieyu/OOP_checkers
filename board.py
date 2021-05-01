@@ -7,24 +7,24 @@ class Board:
 
         # this is the standard starting layout! wowzers!
         # (ok yeah this looks terrible I'm sorry maybe we can change later? idk)
-        # self.board = [[Pawn(BLACK, (0, 0)), 0, Pawn(BLACK, (0, 2)), 0, Pawn(BLACK, (0, 4)), 0, Pawn(BLACK, (0, 6)), 0],
-        #               [0, Pawn(BLACK, (1, 1)), 0, Pawn(BLACK, (1, 3)), 0, Pawn(BLACK, (1, 5)), 0, Pawn(BLACK, (1, 7))],
-        #               [Pawn(BLACK, (2, 0)), 0, Pawn(BLACK, (2, 2)), 0, Pawn(BLACK, (2, 4)), 0, Pawn(BLACK, (2, 6)), 0],
-        #               [0, 1, 0, 1, 0, 1, 0, 1],
-        #               [1, 0, 1, 0, 1, 0, 1, 0],
-        #               [0, Pawn(WHITE, (5, 1)), 0, Pawn(WHITE, (5, 3)), 0, Pawn(WHITE, (5, 5)), 0, Pawn(WHITE, (5, 7))],
-        #               [Pawn(WHITE, (6, 0)), 0, Pawn(WHITE, (6, 2)), 0, Pawn(WHITE, (6, 4)), 0, Pawn(WHITE, (6, 6)), 0],
-        #               [0, Pawn(WHITE, (7, 1)), 0, Pawn(WHITE, (7, 3)), 0, Pawn(WHITE, (7, 5)), 0, Pawn(WHITE, (7, 7))]]
-
-        # lookie here! it's a modified board for looking at jumps! wowzers!
-        self.board = [[Pawn(BLACK, (0, 0)), 0, 1, 0, Pawn(BLACK, (0, 4)), 0, Pawn(BLACK, (0, 6)), 0],
-                      [0, Pawn(BLACK, (1, 1)), 0, 1, 0, Pawn(BLACK, (1, 5)), 0, Pawn(BLACK, (1, 7))],
-                      [1, 0, Pawn(BLACK, (2, 2)), 0, 1, 0, Pawn(BLACK, (2, 6)), 0],
-                      [0, Pawn(BLACK, (3, 1)), 0, Pawn(BLACK, (3, 3)), 0, 1, 0, 1],
+        self.board = [[Pawn(BLACK, (0, 0)), 0, Pawn(BLACK, (0, 2)), 0, Pawn(BLACK, (0, 4)), 0, Pawn(BLACK, (0, 6)), 0],
+                      [0, Pawn(BLACK, (1, 1)), 0, Pawn(BLACK, (1, 3)), 0, Pawn(BLACK, (1, 5)), 0, Pawn(BLACK, (1, 7))],
+                      [Pawn(BLACK, (2, 0)), 0, Pawn(BLACK, (2, 2)), 0, Pawn(BLACK, (2, 4)), 0, Pawn(BLACK, (2, 6)), 0],
+                      [0, 1, 0, 1, 0, 1, 0, 1],
                       [1, 0, 1, 0, 1, 0, 1, 0],
-                      [0, Pawn(WHITE, (5, 1)), 0, Pawn(BLACK, (5, 3)), 0, Pawn(BLACK, (5, 5)), 0, Pawn(WHITE, (5, 7))],
+                      [0, Pawn(WHITE, (5, 1)), 0, Pawn(WHITE, (5, 3)), 0, Pawn(WHITE, (5, 5)), 0, Pawn(WHITE, (5, 7))],
                       [Pawn(WHITE, (6, 0)), 0, Pawn(WHITE, (6, 2)), 0, Pawn(WHITE, (6, 4)), 0, Pawn(WHITE, (6, 6)), 0],
                       [0, Pawn(WHITE, (7, 1)), 0, Pawn(WHITE, (7, 3)), 0, Pawn(WHITE, (7, 5)), 0, Pawn(WHITE, (7, 7))]]
+
+        # lookie here! it's a modified board for looking at jumps! wowzers!
+        # self.board = [[Pawn(BLACK, (0, 0)), 0, 1, 0, Pawn(BLACK, (0, 4)), 0, Pawn(BLACK, (0, 6)), 0],
+        #               [0, Pawn(BLACK, (1, 1)), 0, 1, 0, Pawn(BLACK, (1, 5)), 0, Pawn(BLACK, (1, 7))],
+        #               [1, 0, Pawn(BLACK, (2, 2)), 0, 1, 0, Pawn(BLACK, (2, 6)), 0],
+        #               [0, Pawn(BLACK, (3, 1)), 0, Pawn(BLACK, (3, 3)), 0, 1, 0, 1],
+        #               [1, 0, 1, 0, 1, 0, 1, 0],
+        #               [0, Pawn(WHITE, (5, 1)), 0, Pawn(BLACK, (5, 3)), 0, Pawn(BLACK, (5, 5)), 0, Pawn(WHITE, (5, 7))],
+        #               [Pawn(WHITE, (6, 0)), 0, Pawn(WHITE, (6, 2)), 0, Pawn(WHITE, (6, 4)), 0, Pawn(WHITE, (6, 6)), 0],
+        #               [0, Pawn(WHITE, (7, 1)), 0, Pawn(WHITE, (7, 3)), 0, Pawn(WHITE, (7, 5)), 0, Pawn(WHITE, (7, 7))]]
 
 
     def _print_board(self):
@@ -32,12 +32,7 @@ class Board:
         for i, row in enumerate(self.board):
             print(i + 1, end=" ")
             for j in row:
-                if j == 0:
-                    print(u'◼', end=" ")
-                elif j == 1:
-                    print(u'◻', end=" ")
-                else:
-                    print(j, end=" ")
+                print(u'◼', end=" ") if j == 0 else print(u'◻', end=" ") if j == 1 else print(j, end=" ")
             print("")
         print("  a b c d e f g h")
     

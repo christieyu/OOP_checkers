@@ -30,7 +30,6 @@ class Jump(Move):
         """Initializes jump move and creates location archive."""
         super().__init__(beginning, end)
         self.type = "jump"
-        self.history = []               # idk what to do with this lol
         self.eliminated = [elim]        # contains list of eliminated enemy piece objects
         if isinstance(elim, list):
             self.eliminated = elim      # overwrite in case elim was passed in as a list

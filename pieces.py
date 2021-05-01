@@ -12,13 +12,10 @@ class Piece:
         """Initializes piece."""
         self.color = color
         self.location = location
-        if color == WHITE:
-            self.moves = WHITE_MOVES
-        else:
-            self.moves = BLACK_MOVES
+        self.moves = WHITE_MOVES if color == WHITE else BLACK_MOVES
 
     def _calculate_simple_moves(self, board):
-        """Calculates simple moves diagonally forward & left/right for a pawn piece."""
+        """Calculates simple moves for a piece."""
         possible_moves = []
         for direction in self.moves:
             if self._get_adjacent(board, self.location, direction) == 1:
@@ -27,7 +24,7 @@ class Piece:
         return possible_moves
 
     def _calculate_jump_moves(self, board):
-        """Calculates jump moves diagonally forward & left/right for a pawn piece."""
+        """Calculates jump moves for a piece."""
         pass
 
     def _get_adjacent(self, board, start: tuple, direction: tuple, return_coord=False):
@@ -56,10 +53,7 @@ class Piece:
 class Pawn(Piece):
     def __str__(self):
         """Handles printing characters for pawns."""
-        if self.color == BLACK:
-            return u'⚈'
-        elif self.color == WHITE:
-            return u'⚆'
+        return u'⚈' if self.color == BLACK else u'⚆'
 
     def _calculate_jump_moves(self, board):
         """ Given the board, calculate jump moves for this piece. Returns a list of the possible jumping paths. """
@@ -88,10 +82,7 @@ class King(Piece):
 
     def __str__(self):
         """Handles printing characters for kings."""
-        if self.color == BLACK:
-            return u'⚉'
-        elif self.color == WHITE:
-            return u'⚇'
+        return u'⚉' if self.color == BLACK else u'⚇'
 
     def _calculate_jump_moves(self, board):
         """All of this code but the if statement is the same... is this an OOPortunity for some design pattern...?"""
