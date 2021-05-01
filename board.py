@@ -2,7 +2,7 @@ from pieces import Piece, Pawn, King, BLACK, WHITE
 import moves
 
 class Board:
-    def __init__(self, p1="human", p2="human", history=False):
+    def __init__(self, p1="human", p2="human", history="off"):
         """Initialize board where 0 is an unplayable space and 1 is a playable space."""
 
         # this is the standard starting layout! wowzers!
