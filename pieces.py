@@ -17,7 +17,16 @@ class Piece:
         else:
             self.moves = BLACK_MOVES
 
-    def _calculate_jump_moves(self, board, piece, row, col):
+    def _calculate_simple_moves(self, board):
+        """Calculates simple moves diagonally forward & left/right for a pawn piece."""
+        possible_moves = []
+        for direction in self.moves:
+            if self._get_adjacent(board, self.location, direction) == 1:
+                adj_coord = self._get_adjacent(board, self.location, direction, True)
+                possible_moves.append(Simple(self.location, adj_coord))
+        return possible_moves
+
+    def _calculate_jump_moves(self, board):
         """Calculates jump moves diagonally forward & left/right for a pawn piece."""
         pass
 
@@ -52,16 +61,6 @@ class Pawn(Piece):
         elif self.color == WHITE:
             return u'⚆'
 
-    def _calculate_simple_moves(self, board, row, col):
-        """Calculates simple moves diagonally forward & left/right for a pawn piece."""
-        possible_moves = []
-        for direction in self.moves:
-            if self._get_adjacent(board, self.location, direction) == 1:
-                adj_coord = self._get_adjacent(board, self.location, direction, True)
-                possible_moves.append(Simple(self.location, adj_coord))
-        return possible_moves
-
-
     def _calculate_jump_moves(self, board):
         """ Given the board, calculate jump moves for this piece. Returns a list of the possible jumping paths. """
         possible_moves = []
@@ -81,20 +80,16 @@ class Pawn(Piece):
 
 
 class King(Piece):
+
+    def __init__(self, color, location):                # make this a super() call?
+        self.color = color
+        self.location = location       
+        self.moves = WHITE_MOVES + BLACK_MOVES
+
     def __str__(self):
         """Handles printing characters for kings."""
         if self.color == BLACK:
             return u'⚉'
         elif self.color == WHITE:
             return u'⚇'
-
-    def _calculate_simple_moves(self, board, row, col):
-        """Calculates simple moves diagonally forward/backward & left/right for a king piece."""
-        possible_moves = []
-        for move in [Simple((row, col), (row + 1, col - 1)),
-                     Simple((row, col), (row + 1, col + 1)),
-                     Simple((row, col), (row - 1, col - 1)),
-                     Simple((row, col), (row - 1, col + 1))]:
-            if move.end != None:
-                possible_moves.append(move)
-        return possible_moves
+            

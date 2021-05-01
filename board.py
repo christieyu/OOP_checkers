@@ -64,7 +64,7 @@ class Board:
         self._check_selection(piece)
         moves = piece._calculate_jump_moves(self.board)                     # If there are jump moves, we must do them!
         if not moves:
-            return piece._calculate_simple_moves(self.board, row, col)      # if no jump moves, then return simple moves
+            return piece._calculate_simple_moves(self.board)      # if no jump moves, then return simple moves
         return moves
 
 
@@ -81,5 +81,10 @@ class Board:
                 row, col = piece.location
                 self.board[row][col] = 1
 
+        self._check_king(self.board[e[0]][e[1]])
 
-            
+    def _check_king(self, piece):
+        """If a pawn has reached the end of the board, promote it to king."""
+        c = piece.location
+        if (c[0] == 0 and piece.color == WHITE) or (c[0] == 7 and piece.color == BLACK):
+            self.board[c[0]][c[1]] = King(piece.color, c)
