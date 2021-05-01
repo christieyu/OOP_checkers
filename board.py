@@ -52,9 +52,9 @@ class Board:
         # check if player owns this piece
         pass
 
-    def _calculate_moves(self, position):
+    def _calculate_moves(self, position, already_coords=False):
         """Given the user's selected position, returns possible moves as a list."""
-        row, col = self._convert_checker_coord(position)
+        row, col = self._convert_checker_coord(position) if already_coords == False else position
         piece = self.board[row][col]
         self._check_selection(piece)
         moves = piece._calculate_jump_moves(self.board)                     # If there are jump moves, we must do them!

@@ -74,7 +74,6 @@ class Pawn(Piece):
 
 
 class King(Piece):
-
     def __init__(self, color, location):                # make this a super() call?
         self.color = color
         self.location = location       

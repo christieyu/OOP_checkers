@@ -1,4 +1,5 @@
 import sys
+import random
 from board import Board
 from pieces import Piece, BLACK, WHITE
 
@@ -11,7 +12,7 @@ class CLI:
         self.history = sys.argv[3] if len(sys.argv) > 3 else history
         self.board = Board(sys.argv)
 
-    def _display_moves(self, position):
+    def _human_moves(self, position):
         """Print a piece's possible moves."""
         row, col = self.board._convert_checker_coord(position)
         # Check if no piece at position
@@ -27,10 +28,46 @@ class CLI:
         if len(possible_moves) == 0:
             print("That piece cannot move")
             return
+        # Otherwise move is valid
         for i, move in enumerate(possible_moves):
             print(f"{i}: {move}")
         move = input("Select a move by entering the corresponding index\n")
         self.board._execute_move(possible_moves[int(move)])
+        self._new_turn()
+
+    def _random_moves(self):
+        # go through board for valid pieces with possible moves and append to a list
+        total_moves = []
+        for row in range(len(self.board.board)):
+            for col in range(len(self.board.board[row])):
+                if isinstance(self.board.board[row][col], Piece) and self.board.board[row][col].color == self.player:
+                    possible_moves = self.board._calculate_moves((row, col), True)
+                    if len(possible_moves) > 0:
+                        for move in possible_moves:
+                            total_moves.append(move)
+        # choose a random move from list
+        move = random.choice(total_moves)
+        self.board._execute_move(move)
+        self._new_turn()
+
+    def _greedy_moves(self):
+        # go through board for valid pieces with possible moves and find greediest moveset
+        greedy_move_length = -1
+        greedy_move_choices = []
+        for row in range(len(self.board.board)):
+            for col in range(len(self.board.board[row])):
+                if isinstance(self.board.board[row][col], Piece) and self.board.board[row][col].color == self.player:
+                    possible_moves = self.board._calculate_moves((row, col), True)
+                    if len(possible_moves) > 0:
+                        for move in possible_moves:
+                            if len(move.eliminated) > greedy_move_length:
+                                greedy_move_length = len(move.eliminated)
+                                greedy_move_choices = [move]
+                            elif len(move.eliminated) == greedy_move_length:
+                                greedy_move_choices.append(move)
+        # choose a random move from list
+        move = random.choice(greedy_move_choices)
+        self.board._execute_move(move)
         self._new_turn()
 
     def _new_turn(self):
@@ -48,8 +85,8 @@ class CLI:
             player_type = self.white_player if self.player == WHITE else self.black_player
             if player_type == "human":
                 position = input("Select a piece to move\n")
-                self._display_moves(position)
+                self._human_moves(position)
             elif player_type == "random":
-                self._random_moves(position)
+                self._random_moves()
             else:
-                self._greedy_moves(position)
+                self._greedy_moves()

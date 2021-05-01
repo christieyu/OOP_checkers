@@ -19,6 +19,7 @@ class Simple(Move):
         """Initializes simple move."""
         super().__init__(*args, **kwargs)
         self.type = "simple"
+        self.eliminated = []
 
     def __str__(self):
         beginning = self._convert_matrix_coord(self.beginning)
