@@ -72,7 +72,7 @@ class Pawn(Piece):
                 if branches:
                     for move in branches:
                         jump_branch = Jump(self.location, move.end, move.eliminated)                # not quite sure how this works, sry :(
-                        jump_branch.eliminated = jump.eliminated + jump_branch.eliminated           # append eliminated pieces from later on in branch (only works backwards? wtf)
+                        jump_branch.eliminated = jump.eliminated + jump_branch.eliminated           # append eliminated pieces from later on in branch
                         possible_moves.append(jump_branch)
                 else:
                     possible_moves.append(jump)                                                     # if no branches, return this jump as destination
@@ -92,4 +92,24 @@ class King(Piece):
             return u'⚉'
         elif self.color == WHITE:
             return u'⚇'
-            
+
+    def _calculate_jump_moves(self, board):
+        """All of this code but the if statement is the same... is this an OOPortunity for some design pattern...?"""
+        possible_moves = []
+        for direction in self.moves:
+            jump = self._check_jump(board, self.location, direction)
+            if jump != None:
+                ghost = Pawn(self.color, jump.end)
+                branches = ghost._calculate_jump_moves(board)
+                if branches:
+                    for move in branches:
+                        if move.end == jump.start:
+                            continue                                                            # no multi-jump-backs!
+                        jump_branch = Jump(self.location, move.end, move.eliminated)
+                        jump_branch.eliminated = jump.eliminated + jump_branch.eliminated
+                        possible_moves.append(jump_branch)
+                else:
+                    possible_moves.append(jump)
+        return possible_moves
+
+
