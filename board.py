@@ -15,6 +15,7 @@ class Board:
                       [0, Pawn(WHITE, (5, 1)), 0, Pawn(WHITE, (5, 3)), 0, Pawn(WHITE, (5, 5)), 0, Pawn(WHITE, (5, 7))],
                       [Pawn(WHITE, (6, 0)), 0, Pawn(WHITE, (6, 2)), 0, Pawn(WHITE, (6, 4)), 0, Pawn(WHITE, (6, 6)), 0],
                       [0, Pawn(WHITE, (7, 1)), 0, Pawn(WHITE, (7, 3)), 0, Pawn(WHITE, (7, 5)), 0, Pawn(WHITE, (7, 7))]]
+        self.draw_counter = 0
 
         # lookie here! it's a modified board for looking at jumps! wowzers!
         # self.board = [[Pawn(BLACK, (0, 0)), 0, 1, 0, Pawn(BLACK, (0, 4)), 0, Pawn(BLACK, (0, 6)), 0],
@@ -44,24 +45,14 @@ class Board:
         row = int(row)
         return (row - 1, col - 1)
 
-    def _check_selection(self, piece):
-        """Checks if a selected space is legal for this move (e.g. piece has correct 
-        color for this turn, the board position contains a piece, etc)"""
-        # check if piece can move
-        # check if piece exists at location
-        # check if player owns this piece
-        pass
-
     def _calculate_moves(self, position, already_coords=False):
         """Given the user's selected position, returns possible moves as a list."""
         row, col = self._convert_checker_coord(position) if already_coords == False else position
         piece = self.board[row][col]
-        self._check_selection(piece)
         moves = piece._calculate_jump_moves(self.board)                     # If there are jump moves, we must do them!
         if not moves:
             return piece._calculate_simple_moves(self.board)      # if no jump moves, then return simple moves
         return moves
-
 
     def _execute_move(self, move):
         """Given the user's selected move, executes it and updates piece position."""
@@ -75,6 +66,9 @@ class Board:
             for piece in move.eliminated:                   # removed jumped pieces
                 row, col = piece.location
                 self.board[row][col] = 1
+            self.draw_counter = 0
+        else:
+            self.draw_counter += 1
 
         self._check_king(self.board[e[0]][e[1]])
 

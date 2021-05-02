@@ -64,7 +64,7 @@ class CLI:
         """Checks win conditions and changes current player's turn."""
         self.turn += 1
         self.player = BLACK if self.player == WHITE else WHITE
-        # check win condition
+        # check win condition by assessing all possible moves of current player
         total_moves = []
         for row in range(len(self.board.board)):
             for col in range(len(self.board.board[row])):
@@ -77,6 +77,10 @@ class CLI:
         if len(total_moves) == 0:
             color = "black" if self.player == BLACK else "white"
             print(f"{color} has won")
+            sys.exit(0)
+        # draw
+        if self.board.draw_counter >= 50:
+            print("draw")
             sys.exit(0)
         # game continues
         if self.player == BLACK:
