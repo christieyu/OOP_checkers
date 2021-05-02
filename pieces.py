@@ -4,9 +4,6 @@
 import enum
 from moves import Move, Simple, Jump
 
-BLACK = 0
-WHITE = 1
-
 WHITE_MOVES = [(-1, 1), (-1, -1)]
 BLACK_MOVES = [(1, 1), (1, -1)]
 
@@ -15,7 +12,7 @@ class Piece:
         """Initializes piece."""
         self.color = color
         self.location = location
-        self.moves = WHITE_MOVES if color == WHITE else BLACK_MOVES
+        self.moves = WHITE_MOVES if color == "white" else BLACK_MOVES
 
 
     def calculate_simple_moves(self, board):
@@ -78,7 +75,7 @@ class Piece:
 class Pawn(Piece):
     def __str__(self):
         """Handles printing characters for pawns."""
-        return u'⚈' if self.color == BLACK else u'⚆'
+        return u'⚈' if self.color == "black" else u'⚆'
 
     def _has_jumpback(self, branch, prev_move):
         False                                               # can't jump backwards, no need to check
@@ -92,7 +89,7 @@ class King(Piece):
 
     def __str__(self):
         """Handles printing characters for kings."""
-        return u'⚉' if self.color == BLACK else u'⚇'
+        return u'⚉' if self.color == "black" else u'⚇'
 
     def _has_jumpback(self, branch, prev_move):
         if branch.end == prev_move.beginning:
