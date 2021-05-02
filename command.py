@@ -15,6 +15,11 @@ class CLI:
         self.player_state = self.white_state
         self.history = sys.argv[3] if len(sys.argv) > 3 else history
         self.board = Board(sys.argv)
+        self._choices = {
+            "human": self._human_moves,
+            "random": self._random_moves,
+            "greedy": self._greedy_moves,
+        }
         self._update_moveset()
         # get randomized seed
         with open('seed.txt', 'r') as seed_f:
@@ -24,8 +29,9 @@ class CLI:
     def _toggle_color(self):
         self.player_state._toggle_color()
 
-    def _human_moves(self, position):
+    def _human_moves(self):
         """Print a piece's possible moves."""
+        position = input("Select a piece to move\n")
         row, col = self.board._convert_checker_coord(position)
         # Check if no piece at position
         if isinstance(self.board.board[row][col], Piece) == False:
@@ -105,11 +111,5 @@ class CLI:
             self.board._print_board()
             print(f"Turn: {self.turn}, {self.player_state}")
             self._check_victory_draw()
-            if self.player_state.player == "human":
-                position = input("Select a piece to move\n")
-                self._human_moves(position)
-            elif self.player_state.player == "random":
-                self._random_moves()
-            else:
-                self._greedy_moves()
+            self._choices.get(self.player_state.player)()
             self._new_turn()
