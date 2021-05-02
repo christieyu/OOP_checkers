@@ -17,7 +17,7 @@ class Board:
                       [0, Pawn("white", (7, 1)), 0, Pawn("white", (7, 3)), 0, Pawn("white", (7, 5)), 0, Pawn("white", (7, 7))]]
         self.draw_counter = 0
 
-    def _print_board(self):
+    def print_board(self):
         """Prints board matrix as unicode GUI."""
         for i, row in enumerate(self.board):
             print(i + 1, end=" ")
@@ -34,7 +34,7 @@ class Board:
         row = int(row)
         return (row - 1, col - 1)
 
-    def _calculate_moves(self, position, already_coords=False):
+    def calculate_moves(self, position, already_coords=False):
         """Given the user's selected position, returns possible moves as a list."""
         row, col = self._convert_checker_coord(position) if already_coords == False else position
         piece = self.board[row][col]
@@ -43,7 +43,7 @@ class Board:
             return piece.calculate_simple_moves(self.board)                 # if no jump moves, then return simple moves
         return moves
 
-    def _execute_move(self, move):
+    def execute_move(self, move):
         """Given the user's selected move, executes it and updates piece position."""
         b = move.beginning
         e = move.end

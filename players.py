@@ -8,7 +8,7 @@ class PlayerState:
         self.moves = []
         self.pieces_left = True
 
-    def _toggle_color(self):
+    def toggle_color(self):
         pass
 
 class WhiteState(PlayerState):
@@ -20,7 +20,7 @@ class WhiteState(PlayerState):
     def __str__(self):
         return "white"
 
-    def _toggle_color(self):
+    def toggle_color(self):
         """Toggles between white and black player objects."""
         self.CLI.player_state = self.CLI.black_state
 
@@ -33,7 +33,7 @@ class BlackState(PlayerState):
     def __str__(self):
         return "black"
 
-    def _toggle_color(self):
+    def toggle_color(self):
         """Toggles between white and black player objects."""
         self.CLI.player_state = self.CLI.white_state
         
@@ -47,4 +47,4 @@ class PlayerMove:
         self.board_state = board_state
 
     def execute(self, current_board):
-        current_board._execute_move(self.move_obj)
+        current_board.execute_move(self.move_obj)

@@ -33,9 +33,9 @@ class CLI:
             seed_value = seed_f.read()
         random.seed(seed_value)
 
-    def _toggle_color(self):
+    def toggle_color(self):
         """Utilizes the player_state state machine to toggle between white and black player objects."""
-        self.player_state._toggle_color()
+        self.player_state.toggle_color()
 
     def _human_moves(self):
         """If player is human, prints a piece's possible moves and requests selection."""
@@ -50,7 +50,7 @@ class CLI:
             print("That is not your piece")
             return
         # check if no possible moves or possible jumps not selected
-        possible_moves = self.board._calculate_moves(position)
+        possible_moves = self.board.calculate_moves(position)
         if len(possible_moves) == 0 or (isinstance(possible_moves[0], Simple) and True in [isinstance(move, Jump) for move in self.player_state.moves]):
             print("That piece cannot move")
             return
@@ -99,7 +99,7 @@ class CLI:
                 if isinstance(self.board.board[row][col], Piece) and self.board.board[row][col].color == self.player_state.color:
                     # update moveset and whether there are pieces left of that color
                     self.player_state.pieces_left = True
-                    possible_moves = self.board._calculate_moves((row, col), True)
+                    possible_moves = self.board.calculate_moves((row, col), True)
                     if len(possible_moves) > 0:
                         for move in possible_moves:
                             total_moves.append(move)
@@ -108,7 +108,7 @@ class CLI:
     def _new_turn(self):
         """Updates player info each turn."""
         self.turn += 1
-        self.player_state._toggle_color()
+        self.player_state.toggle_color()
         self._update_moveset()
 
     def _do_history(self):
@@ -128,18 +128,18 @@ class CLI:
                 next_move = self.move_history[self.turn - 1]
                 next_move.execute(self.board)
                 self.turn += 1
-                self.player_state._toggle_color()
+                self.player_state.toggle_color()
                 return True
         except IndexError:
-            return True                                         # if undo/redo unavailable, don't do anything
-        self.move_history = self.move_history[:self.turn-1]     # if new history branch, cut off old paths
+            return True                                                   # if undo/redo unavailable, don't do anything
+        self.move_history = self.move_history[:self.turn-1]               # if new history branch, cut off old paths
         return False
 
     def _check_victory_draw(self):
         """Checks win conditions and changes current player's turn."""
         # victory conditions (no pieces left)
         if self.player_state.pieces_left == False:
-            self.player_state._toggle_color()
+            self.player_state.toggle_color()
             print(f"{self.player_state} has won")
             sys.exit(0)
         # draw conditions (no moves left or 50 turns without capturing)
@@ -153,7 +153,7 @@ class CLI:
     def run(self):
         """Prints board, displays moves, asks player for move, executes move, updates the board after each turn, and checks for victory conditions."""
         while True:
-            self.board._print_board()
+            self.board.print_board()
             print(f"Turn: {self.turn}, {self.player_state}")
             self._check_victory_draw()
             if self._do_history():
