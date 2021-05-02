@@ -9,11 +9,9 @@ BLACK_MOVES = [(1, 1), (1, -1)]
 
 class Piece:
     def __init__(self, color, location):
-        """Initializes piece."""
         self.color = color
         self.location = location
         self.moves = WHITE_MOVES if color == "white" else BLACK_MOVES
-
 
     def calculate_simple_moves(self, board):
         """Calculates simple moves for a piece."""
@@ -24,13 +22,12 @@ class Piece:
                 possible_moves.append(Simple(self.location, adj_coord))
         return possible_moves
 
-
     def _has_jumpback(self, branch: Jump, prev_move: Jump):
         """Template method for checking if a possible jump branch loops back onto itself."""
         pass
 
     def calculate_jump_moves(self, board):
-        """ Given the board, calculate jump moves for this piece. Returns a list of the possible jumping paths. """
+        """Given the board, calculates jump moves for this piece. Returns a list of the possible jumping paths."""
         possible_moves = []
         for direction in self.moves:
             jump = self._check_jump(board, self.location, direction)
@@ -74,7 +71,6 @@ class Piece:
 
 class Pawn(Piece):
     def __str__(self):
-        """Handles printing characters for pawns."""
         return u'⚈' if self.color == "black" else u'⚆'
 
     def _has_jumpback(self, branch, prev_move):
@@ -88,10 +84,10 @@ class King(Piece):
         self.moves = WHITE_MOVES + BLACK_MOVES
 
     def __str__(self):
-        """Handles printing characters for kings."""
         return u'⚉' if self.color == "black" else u'⚇'
 
     def _has_jumpback(self, branch, prev_move):
+        """Template method for checking if a possible jump branch loops back onto itself."""
         if branch.end == prev_move.beginning:
             return True
         return False

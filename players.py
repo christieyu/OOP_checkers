@@ -2,6 +2,7 @@
 # CPSC 327 (Object Oriented Programming) Homework 4
 
 class PlayerState:
+    """State object used to toggle between WhiteState and BlackState."""
     def __init__(self, CLI):
         self.CLI = CLI
         self.moves = []
@@ -20,6 +21,7 @@ class WhiteState(PlayerState):
         return "white"
 
     def _toggle_color(self):
+        """Toggles between white and black player objects."""
         self.CLI.player_state = self.CLI.black_state
 
 class BlackState(PlayerState):
@@ -32,11 +34,12 @@ class BlackState(PlayerState):
         return "black"
 
     def _toggle_color(self):
+        """Toggles between white and black player objects."""
         self.CLI.player_state = self.CLI.white_state
         
 
 class PlayerMove:
-
+    """Stores a move object and the state of the game during one turn."""
     def __init__(self, turn_num, player_state, move_obj, board_state):
         self.turn_num = turn_num
         self.player_state = player_state

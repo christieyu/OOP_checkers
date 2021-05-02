@@ -4,8 +4,6 @@
 class Move:
     def __init__(self, beginning, end):
         """Initializes move and checks that its ending location is within bounds."""
-        # if end[0] < 0 or end[0] > 7 or end[1] < 0 or end[1] > 7 or board[end[0]][end[1]] != 1:
-        # ^^^ last part of OR statement was causing problems for Jump, implement differently?
         if end[0] < 0 or end[0] > 7 or end[1] < 0 or end[1] > 7:
             self.end = None
         else:
@@ -37,7 +35,7 @@ class Jump(Move):
         self.eliminated = [elim]        # contains list of eliminated enemy piece objects
         if isinstance(elim, list):
             self.eliminated = elim      # overwrite in case elim was passed in as a list
-            
+
     def __str__(self):
         beginning = self._convert_matrix_coord(self.beginning)
         end = self._convert_matrix_coord(self.end)
