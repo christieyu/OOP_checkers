@@ -7,6 +7,7 @@ import copy
 from board import Board
 from players import PlayerState, WhiteState, BlackState
 from pieces import Piece
+from moves import Move, Jump, Simple
 
 class PlayerMove:
 
@@ -54,9 +55,9 @@ class CLI:
         if self.board.board[row][col].color != self.player_state.color:
             print("That is not your piece")
             return
-        # Check if no possible moves
+        # Check if no possible moves or possible jumps not selected
         possible_moves = self.board._calculate_moves(position)
-        if len(possible_moves) == 0:
+        if len(possible_moves) == 0 or (isinstance(possible_moves[0], Simple) and True in [isinstance(move, Jump) for move in self.player_state.moves]):
             print("That piece cannot move")
             return
         # Otherwise move is valid
@@ -113,6 +114,7 @@ class CLI:
         """Checks win conditions and changes current player's turn."""
         # victory conditions
         if self.player_state.pieces_left == False:
+            self.player_state._toggle_color()
             print(f"{self.player_state} has won")
             sys.exit(0)
         # draw conditions

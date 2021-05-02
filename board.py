@@ -20,14 +20,14 @@ class Board:
                       [0, Pawn("white", (7, 1)), 0, Pawn("white", (7, 3)), 0, Pawn("white", (7, 5)), 0, Pawn("white", (7, 7))]]
 
         # lookie here! it's a modified board for looking at jumps! wowzers!
-        # self.board = [[Pawn(BLACK, (0, 0)), 0, 1, 0, Pawn(BLACK, (0, 4)), 0, Pawn(BLACK, (0, 6)), 0],
-        #               [0, Pawn(BLACK, (1, 1)), 0, 1, 0, Pawn(BLACK, (1, 5)), 0, Pawn(BLACK, (1, 7))],
-        #               [1, 0, Pawn(BLACK, (2, 2)), 0, 1, 0, Pawn(BLACK, (2, 6)), 0],
-        #               [0, Pawn(BLACK, (3, 1)), 0, Pawn(BLACK, (3, 3)), 0, 1, 0, 1],
+        # self.board = [[Pawn("black", (0, 0)), 0, 1, 0, Pawn("black", (0, 4)), 0, Pawn("black", (0, 6)), 0],
+        #               [0, Pawn("black", (1, 1)), 0, 1, 0, Pawn("black", (1, 5)), 0, Pawn("black", (1, 7))],
+        #               [1, 0, Pawn("black", (2, 2)), 0, 1, 0, Pawn("black", (2, 6)), 0],
+        #               [0, Pawn("black", (3, 1)), 0, Pawn("black", (3, 3)), 0, 1, 0, 1],
         #               [1, 0, 1, 0, 1, 0, 1, 0],
-        #               [0, Pawn(WHITE, (5, 1)), 0, Pawn(BLACK, (5, 3)), 0, Pawn(BLACK, (5, 5)), 0, Pawn(WHITE, (5, 7))],
-        #               [Pawn(WHITE, (6, 0)), 0, Pawn(WHITE, (6, 2)), 0, Pawn(WHITE, (6, 4)), 0, Pawn(WHITE, (6, 6)), 0],
-        #               [0, Pawn(WHITE, (7, 1)), 0, Pawn(WHITE, (7, 3)), 0, Pawn(WHITE, (7, 5)), 0, Pawn(WHITE, (7, 7))]]
+        #               [0, Pawn("white", (5, 1)), 0, Pawn("black", (5, 3)), 0, Pawn("black", (5, 5)), 0, Pawn("white", (5, 7))],
+        #               [Pawn("white", (6, 0)), 0, Pawn("white", (6, 2)), 0, Pawn("white", (6, 4)), 0, Pawn("white", (6, 6)), 0],
+        #               [0, Pawn("white", (7, 1)), 0, Pawn("white", (7, 3)), 0, Pawn("white", (7, 5)), 0, Pawn("white", (7, 7))]]
 
         self.draw_counter = 0
 

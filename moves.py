@@ -37,8 +37,9 @@ class Jump(Move):
         self.eliminated = [elim]        # contains list of eliminated enemy piece objects
         if isinstance(elim, list):
             self.eliminated = elim      # overwrite in case elim was passed in as a list
-
+            
     def __str__(self):
         beginning = self._convert_matrix_coord(self.beginning)
         end = self._convert_matrix_coord(self.end)
-        return f"jump move: {beginning}->{end}"
+        captured = ", ".join([self._convert_matrix_coord(piece.location) for piece in self.eliminated])
+        return f"jump move: {beginning}->{end}, capturing [{captured}]"
