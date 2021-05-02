@@ -65,7 +65,7 @@ class CLI:
         choice = input("Select a move by entering the corresponding index\n")
 
         move_obj = possible_moves[int(choice)]
-        move = PlayerMove(self.turn, self.player, move_obj, copy.copy(self.board))
+        move = PlayerMove(self.turn, self.player_state.color, move_obj, copy.copy(self.board))
         move.execute()
 
         # self.board._execute_move(possible_moves[int(move)])
