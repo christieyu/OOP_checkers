@@ -5,15 +5,17 @@ from pieces import Piece, BLACK, WHITE
 
 class CLI:
     def __init__(self, p1="human", p2="human", history="off"):
-        self.turn = 0
-        self.player = BLACK
+        self.turn = 1
+        self.player = WHITE
         self.white_player = sys.argv[1] if len(sys.argv) > 1 else p1
         self.white_moves = []
         self.black_player = sys.argv[2] if len(sys.argv) > 2 else p2
         self.black_moves = []
         self.history = sys.argv[3] if len(sys.argv) > 3 else history
         self.board = Board(sys.argv)
-
+        self._update_moveset(WHITE)
+        self._update_moveset(BLACK)
+        # get randomized seed
         with open('seed.txt', 'r') as seed_f:
             seed_value = seed_f.read()
         random.seed(seed_value)
@@ -60,41 +62,58 @@ class CLI:
         move = random.choice(greedy_move_choices)
         self.board._execute_move(move)
 
-    def _new_turn(self):
-        """Checks win conditions and changes current player's turn."""
-        self.turn += 1
-        self.player = BLACK if self.player == WHITE else WHITE
+    def _update_moveset(self, color):
         # check win condition by assessing all possible moves of current player
         total_moves = []
+        if color == WHITE:
+            self.white_pieces_left = False
+        else:
+            self.black_pieces_left = False
         for row in range(len(self.board.board)):
             for col in range(len(self.board.board[row])):
-                if isinstance(self.board.board[row][col], Piece) and self.board.board[row][col].color == self.player:
+                if isinstance(self.board.board[row][col], Piece) and self.board.board[row][col].color == color:
+                    if color == WHITE:
+                        self.white_pieces_left = True
+                    else:
+                        self.black_pieces_left = True
                     possible_moves = self.board._calculate_moves((row, col), True)
                     if len(possible_moves) > 0:
                         for move in possible_moves:
                             total_moves.append(move)
-        # victory
-        if len(total_moves) == 0:
-            color = "black" if self.player == BLACK else "white"
-            print(f"{color} has won")
-            sys.exit(0)
-        # draw
-        if self.board.draw_counter >= 50:
-            print("draw")
-            sys.exit(0)
-        # game continues
-        if self.player == BLACK:
+        if color == BLACK:
             self.black_moves = total_moves
         else:
             self.white_moves = total_moves
 
+    def _new_turn(self):
+        # game continues
+        self.turn += 1
+        self.player = BLACK if self.player == WHITE else WHITE
+        self._update_moveset(self.player)
+
+    def _check_victory_draw(self):
+        """Checks win conditions and changes current player's turn."""
+        # victory conditions
+        moves_left = self.white_moves if self.player == WHITE else self.black_moves
+        if (self.white_pieces_left == False and self.player == WHITE) or (self.black_pieces_left == False and self.player == BLACK):
+            color = "black" if self.player == BLACK else "white"
+            print(f"{color} has won")
+            sys.exit(0)
+        # draw conditions
+        elif len(moves_left) == 0:
+            print("draw")
+            sys.exit(0)
+        if self.board.draw_counter >= 50:
+            print("draw")
+            sys.exit(0)
+
     def run(self):
         """Ask player for piece and display piece's possible moves."""
         while True:
-            self._new_turn()
             self.board._print_board()
             color = "black" if self.player == BLACK else "white"
             print(f"Turn: {self.turn}, {color}")
+            self._check_victory_draw()
             player_type = self.white_player if self.player == WHITE else self.black_player
             if player_type == "human":
                 position = input("Select a piece to move\n")
@@ -103,3 +122,4 @@ class CLI:
                 self._random_moves()
             else:
                 self._greedy_moves()
+            self._new_turn()
