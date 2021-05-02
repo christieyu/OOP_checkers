@@ -20,7 +20,6 @@ class PlayerMove:
     def execute(self):
         self.board_state._execute_move(self.move_obj)
 
-
 class CLI:
     def __init__(self, p1="human", p2="human", history="off"):
         self.turn = 1
@@ -29,6 +28,7 @@ class CLI:
         self.player_state = self.white_state
         self.history = sys.argv[3] if len(sys.argv) > 3 else history
         self.board = Board(sys.argv)
+        # strategy pattern setup
         self._choices = {
             "human": self._human_moves,
             "random": self._random_moves,
@@ -72,8 +72,12 @@ class CLI:
         # self.board._execute_move(possible_moves[int(move)])
 
     def _random_moves(self):
-        # choose a random move from moveset
-        move = random.choice(self.player_state.moves)
+        # choose a random move from moveset but prioritize jumps
+        jump_moves = [move for move in self.player_state.moves if isinstance(move, Jump)]
+        if len(jump_moves) > 0:
+            move = random.choice(jump_moves)
+        else:
+            move = random.choice(self.player_state.moves)
         self.board._execute_move(move)
 
     def _greedy_moves(self):
