@@ -14,7 +14,8 @@ class Piece:
         self.location = location
         self.moves = WHITE_MOVES if color == WHITE else BLACK_MOVES
 
-    def _calculate_simple_moves(self, board):
+
+    def calculate_simple_moves(self, board):
         """Calculates simple moves for a piece."""
         possible_moves = []
         for direction in self.moves:
@@ -23,9 +24,29 @@ class Piece:
                 possible_moves.append(Simple(self.location, adj_coord))
         return possible_moves
 
-    def _calculate_jump_moves(self, board):
-        """Calculates jump moves for a piece."""
+
+    def _has_jumpback(self, branch: Jump, prev_move: Jump):
+        """Template method for checking if a possible jump branch loops back onto itself."""
         pass
+
+    def calculate_jump_moves(self, board):
+        """ Given the board, calculate jump moves for this piece. Returns a list of the possible jumping paths. """
+        possible_moves = []
+        for direction in self.moves:
+            jump = self._check_jump(board, self.location, direction)
+            if jump != None:
+                ghost = Pawn(self.color, jump.end)                                                  # see if more jumps exist on this path
+                branches = ghost.calculate_jump_moves(board)                                        # recurse from the position we jumped to!
+                if branches:
+                    for move in branches:
+                        if self._has_jumpback(move, jump):
+                            continue
+                        jump_branch = Jump(self.location, move.end, move.eliminated)                # not quite sure how this works, sry :(
+                        jump_branch.eliminated = jump.eliminated + jump_branch.eliminated           # append eliminated pieces from later on in branch
+                        possible_moves.append(jump_branch)
+                else:
+                    possible_moves.append(jump)                                                     # if no branches, return this jump as destination
+        return possible_moves
 
     def _get_adjacent(self, board, start: tuple, direction: tuple, return_coord=False):
         """Fetches obj or value at location in a given starting point and direction (if it exists)"""
@@ -50,31 +71,18 @@ class Piece:
                 return Jump(start, end, adj)
         return None
 
+
 class Pawn(Piece):
     def __str__(self):
         """Handles printing characters for pawns."""
         return u'⚈' if self.color == BLACK else u'⚆'
 
-    def _calculate_jump_moves(self, board):
-        """ Given the board, calculate jump moves for this piece. Returns a list of the possible jumping paths. """
-        possible_moves = []
-        for direction in self.moves:
-            jump = self._check_jump(board, self.location, direction)
-            if jump != None:
-                ghost = Pawn(self.color, jump.end)                                                  # see if more jumps exist on this path
-                branches = ghost._calculate_jump_moves(board)                                       # recurse from the position we jumped to!
-                if branches:
-                    for move in branches:
-                        jump_branch = Jump(self.location, move.end, move.eliminated)                # not quite sure how this works, sry :(
-                        jump_branch.eliminated = jump.eliminated + jump_branch.eliminated           # append eliminated pieces from later on in branch
-                        possible_moves.append(jump_branch)
-                else:
-                    possible_moves.append(jump)                                                     # if no branches, return this jump as destination
-        return possible_moves
+    def _has_jumpback(self, branch, prev_move):
+        False                                               # can't jump backwards, no need to check
 
 
 class King(Piece):
-    def __init__(self, color, location):                # make this a super() call?
+    def __init__(self, color, location):
         self.color = color
         self.location = location       
         self.moves = WHITE_MOVES + BLACK_MOVES
@@ -83,23 +91,7 @@ class King(Piece):
         """Handles printing characters for kings."""
         return u'⚉' if self.color == BLACK else u'⚇'
 
-    def _calculate_jump_moves(self, board):
-        """All of this code but the if statement is the same... is this an OOPortunity for some design pattern...?"""
-        possible_moves = []
-        for direction in self.moves:
-            jump = self._check_jump(board, self.location, direction)
-            if jump != None:
-                ghost = Pawn(self.color, jump.end)
-                branches = ghost._calculate_jump_moves(board)
-                if branches:
-                    for move in branches:
-                        if move.end == jump.beginning:
-                            continue                                                            # no multi-jump-backs!
-                        jump_branch = Jump(self.location, move.end, move.eliminated)
-                        jump_branch.eliminated = jump.eliminated + jump_branch.eliminated
-                        possible_moves.append(jump_branch)
-                else:
-                    possible_moves.append(jump)
-        return possible_moves
-
-
+    def _has_jumpback(self, branch, prev_move):
+        if branch.end == prev_move.beginning:
+            return True
+        return False

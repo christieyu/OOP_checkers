@@ -15,7 +15,6 @@ class Board:
                       [0, Pawn(WHITE, (5, 1)), 0, Pawn(WHITE, (5, 3)), 0, Pawn(WHITE, (5, 5)), 0, Pawn(WHITE, (5, 7))],
                       [Pawn(WHITE, (6, 0)), 0, Pawn(WHITE, (6, 2)), 0, Pawn(WHITE, (6, 4)), 0, Pawn(WHITE, (6, 6)), 0],
                       [0, Pawn(WHITE, (7, 1)), 0, Pawn(WHITE, (7, 3)), 0, Pawn(WHITE, (7, 5)), 0, Pawn(WHITE, (7, 7))]]
-        self.draw_counter = 0
 
         # lookie here! it's a modified board for looking at jumps! wowzers!
         # self.board = [[Pawn(BLACK, (0, 0)), 0, 1, 0, Pawn(BLACK, (0, 4)), 0, Pawn(BLACK, (0, 6)), 0],
@@ -27,6 +26,7 @@ class Board:
         #               [Pawn(WHITE, (6, 0)), 0, Pawn(WHITE, (6, 2)), 0, Pawn(WHITE, (6, 4)), 0, Pawn(WHITE, (6, 6)), 0],
         #               [0, Pawn(WHITE, (7, 1)), 0, Pawn(WHITE, (7, 3)), 0, Pawn(WHITE, (7, 5)), 0, Pawn(WHITE, (7, 7))]]
 
+        self.draw_counter = 0
 
     def _print_board(self):
         """Prints board matrix as unicode GUI."""
@@ -49,9 +49,9 @@ class Board:
         """Given the user's selected position, returns possible moves as a list."""
         row, col = self._convert_checker_coord(position) if already_coords == False else position
         piece = self.board[row][col]
-        moves = piece._calculate_jump_moves(self.board)                     # If there are jump moves, we must do them!
+        moves = piece.calculate_jump_moves(self.board)                     # If there are jump moves, we must do them!
         if not moves:
-            return piece._calculate_simple_moves(self.board)      # if no jump moves, then return simple moves
+            return piece.calculate_simple_moves(self.board)      # if no jump moves, then return simple moves
         return moves
 
     def _execute_move(self, move):
