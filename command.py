@@ -3,9 +3,22 @@
 
 import sys
 import random
+import copy
 from board import Board
 from players import PlayerState, WhiteState, BlackState
 from pieces import Piece
+
+class PlayerMove:
+
+    def __init__(self, turn_num, move_player, move_obj, board_state):
+        self.turn_num = turn_num
+        self.move_player = move_player
+        self.move_obj = move_obj
+        self.board_state = board_state
+
+    def execute(self):
+        self.board_state._execute_move(self.move_obj)
+
 
 class CLI:
     def __init__(self, p1="human", p2="human", history="off"):
@@ -43,8 +56,13 @@ class CLI:
         # Otherwise move is valid
         for i, move in enumerate(possible_moves):
             print(f"{i}: {move}")
-        move = input("Select a move by entering the corresponding index\n")
-        self.board._execute_move(possible_moves[int(move)])
+        choice = input("Select a move by entering the corresponding index\n")
+
+        move_obj = possible_moves[int(choice)]
+        move = PlayerMove(self.turn, self.player, move_obj, copy.copy(self.board))
+        move.execute()
+
+        # self.board._execute_move(possible_moves[int(move)])
 
     def _random_moves(self):
         # choose a random move from moveset
