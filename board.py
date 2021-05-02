@@ -1,3 +1,6 @@
+# Christie Yu, Matt Udry
+# CPSC 327 (Object Oriented Programming) Homework 4
+
 from pieces import Piece, Pawn, King, BLACK, WHITE
 import moves
 

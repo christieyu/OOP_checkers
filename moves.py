@@ -1,3 +1,6 @@
+# Christie Yu, Matt Udry
+# CPSC 327 (Object Oriented Programming) Homework 4
+
 class Move:
     def __init__(self, beginning, end):
         """Initializes move and checks that its ending location is within bounds."""

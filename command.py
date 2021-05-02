@@ -1,3 +1,6 @@
+# Christie Yu, Matt Udry
+# CPSC 327 (Object Oriented Programming) Homework 4
+
 import sys
 import random
 from board import Board
@@ -96,7 +99,7 @@ class CLI:
         # victory conditions
         moves_left = self.white_moves if self.player == WHITE else self.black_moves
         if (self.white_pieces_left == False and self.player == WHITE) or (self.black_pieces_left == False and self.player == BLACK):
-            color = "black" if self.player == BLACK else "white"
+            color = "black" if self.player == WHITE else "white"
             print(f"{color} has won")
             sys.exit(0)
         # draw conditions
