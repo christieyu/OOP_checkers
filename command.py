@@ -11,22 +11,23 @@ from moves import Move, Jump, Simple
 
 class PlayerMove:
 
-    def __init__(self, turn_num, move_player, move_obj, board_state):
+    def __init__(self, turn_num, player_state, move_obj, board_state):
         self.turn_num = turn_num
-        self.move_player = move_player
+        self.player_state = player_state
         self.move_obj = move_obj
         self.board_state = board_state
 
-    def execute(self):
-        self.board_state._execute_move(self.move_obj)
+    def execute(self, current_board):
+        current_board._execute_move(self.move_obj)
 
 class CLI:
-    def __init__(self, p1="human", p2="human", history="off"):
+    def __init__(self, p1="human", p2="human"):
         self.turn = 1
         self.white_state = WhiteState(self, sys.argv[1] if len(sys.argv) > 1 else p1)
         self.black_state = BlackState(self, sys.argv[2] if len(sys.argv) > 2 else p2)
         self.player_state = self.white_state
-        self.history = sys.argv[3] if len(sys.argv) > 3 else history
+        self.history = True if len(sys.argv) > 3 else False
+        self.move_history = []
         self.board = Board(sys.argv)
         # strategy pattern setup
         self._choices = {
@@ -66,8 +67,10 @@ class CLI:
         choice = input("Select a move by entering the corresponding index\n")
 
         move_obj = possible_moves[int(choice)]
-        move = PlayerMove(self.turn, self.player_state.color, move_obj, copy.copy(self.board))
-        move.execute()
+        move = PlayerMove(self.turn, self.player_state, move_obj, copy.deepcopy(self.board))
+        self.move_history.append(move)
+        move.execute(self.board)
+
 
         # self.board._execute_move(possible_moves[int(move)])
 
@@ -114,6 +117,32 @@ class CLI:
         self.player_state._toggle_color()
         self._update_moveset()
 
+    def _do_history(self):
+        """Presents undo/redo/next options at beginning of turn. Returns False if history is disable or "next"
+        is selected, otherwise returns True (skipping usual move operations for undo/redo)"""
+        if not self.history:
+            return False
+        
+        op = input("undo, redo, or next\n")
+        try:
+            if op == "undo":
+                self.turn -= 1
+                last_move = self.move_history[self.turn - 1]
+                self.board = copy.deepcopy(last_move.board_state)
+                self.player_state = last_move.player_state
+                return True
+            elif op == "redo":
+                next_move = self.move_history[self.turn - 1]
+                next_move.execute(self.board)
+                self.turn += 1
+                self.player_state._toggle_color()
+                return True
+        except IndexError:
+            return True                                                 # if undo/redo unavailable, don't do anything
+        
+        self.move_history = self.move_history[:self.turn-1]             # if new history branch, cut off old paths
+        return False
+
     def _check_victory_draw(self):
         """Checks win conditions and changes current player's turn."""
         # victory conditions
@@ -135,5 +164,7 @@ class CLI:
             self.board._print_board()
             print(f"Turn: {self.turn}, {self.player_state}")
             self._check_victory_draw()
+            if self._do_history():
+                continue
             self._choices.get(self.player_state.player)()
             self._new_turn()
