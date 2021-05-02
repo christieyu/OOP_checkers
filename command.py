@@ -5,20 +5,10 @@ import sys
 import random
 import copy
 from board import Board
-from players import PlayerState, WhiteState, BlackState
+from players import PlayerState, WhiteState, BlackState, PlayerMove
 from pieces import Piece
 from moves import Move, Jump, Simple
 
-class PlayerMove:
-
-    def __init__(self, turn_num, player_state, move_obj, board_state):
-        self.turn_num = turn_num
-        self.player_state = player_state
-        self.move_obj = move_obj
-        self.board_state = board_state
-
-    def execute(self, current_board):
-        current_board._execute_move(self.move_obj)
 
 class CLI:
     def __init__(self, p1="human", p2="human"):
@@ -66,13 +56,11 @@ class CLI:
             print(f"{i}: {move}")
         choice = input("Select a move by entering the corresponding index\n")
 
-        move_obj = possible_moves[int(choice)]
-        move = PlayerMove(self.turn, self.player_state, move_obj, copy.deepcopy(self.board))
+        # move_obj = possible_moves[int(choice)]
+        move = PlayerMove(self.turn, self.player_state, possible_moves[int(choice)], copy.deepcopy(self.board))
         self.move_history.append(move)
         move.execute(self.board)
 
-
-        # self.board._execute_move(possible_moves[int(move)])
 
     def _random_moves(self):
         # choose a random move from moveset but prioritize jumps
@@ -81,7 +69,9 @@ class CLI:
             move = random.choice(jump_moves)
         else:
             move = random.choice(self.player_state.moves)
-        self.board._execute_move(move)
+        move = PlayerMove(self.turn, self.player_state, move, copy.deepcopy(self.board))
+        self.move_history.append(move)
+        move.execute(self.board)
 
     def _greedy_moves(self):
         # go through board for valid pieces with possible moves and find greediest moveset
@@ -95,7 +85,10 @@ class CLI:
                 greedy_move_choices.append(move)
         # choose a random move from list
         move = random.choice(greedy_move_choices)
-        self.board._execute_move(move)
+        move = PlayerMove(self.turn, self.player_state, move, copy.deepcopy(self.board))
+        self.move_history.append(move)
+        move.execute(self.board)
+
 
     def _update_moveset(self):
         # check win condition by assessing all possible moves of current player
@@ -122,7 +115,6 @@ class CLI:
         is selected, otherwise returns True (skipping usual move operations for undo/redo)"""
         if not self.history:
             return False
-        
         op = input("undo, redo, or next\n")
         try:
             if op == "undo":

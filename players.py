@@ -33,3 +33,15 @@ class BlackState(PlayerState):
 
     def _toggle_color(self):
         self.CLI.player_state = self.CLI.white_state
+        
+
+class PlayerMove:
+
+    def __init__(self, turn_num, player_state, move_obj, board_state):
+        self.turn_num = turn_num
+        self.player_state = player_state
+        self.move_obj = move_obj
+        self.board_state = board_state
+
+    def execute(self, current_board):
+        current_board._execute_move(self.move_obj)
