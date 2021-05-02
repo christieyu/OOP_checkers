@@ -14,6 +14,10 @@ class CLI:
         self.history = sys.argv[3] if len(sys.argv) > 3 else history
         self.board = Board(sys.argv)
 
+        with open('seed.txt', 'r') as seed_f:
+            seed_value = seed_f.read()
+        random.seed(seed_value)
+
     def _human_moves(self, position):
         """Print a piece's possible moves."""
         row, col = self.board._convert_checker_coord(position)

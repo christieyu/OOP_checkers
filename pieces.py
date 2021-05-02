@@ -93,7 +93,7 @@ class King(Piece):
                 branches = ghost._calculate_jump_moves(board)
                 if branches:
                     for move in branches:
-                        if move.end == jump.start:
+                        if move.end == jump.beginning:
                             continue                                                            # no multi-jump-backs!
                         jump_branch = Jump(self.location, move.end, move.eliminated)
                         jump_branch.eliminated = jump.eliminated + jump_branch.eliminated
