@@ -1,4 +1,4 @@
-# Object-Oriented Chess Implementation in Python
+# Object-Oriented Checkers Implementation in Python
 Implementation of checkers for CPSC 327 (Object Oriented Programming) at Yale by Christie Yu and Matt Udry.
 
 ## Project Description
