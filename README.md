@@ -1,5 +1,5 @@
 # Checkers Python Implementation
-Implementation of checkers for CPSC 327 (Object Oriented Programming) at Yale.
+Implementation of checkers for CPSC 327 (Object Oriented Programming) at Yale by Christie Yu and Matt Udry.
 
 ## Project Description
 
